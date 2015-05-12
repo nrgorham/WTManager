@@ -6,14 +6,14 @@ Character
 	Statblock (big text block)
 	Dicepools[] 
 	Damagetrack
-	
+
 Dicepools
 	Name
 	Pool (Editable via a textbox)
 	+/- buttons for penalty, bonus dice
 	Roll button that shows the rolled sets. If there's wiggle dice in the pool, each set can be clicked to allocate a wiggle die to that pool. 
 	A way to indicate that dice in a set have been gobbled
-	
+
 Damagetrack
 	LAR Hardened: Y/N
 	HAR Hardened: Y/N
@@ -26,7 +26,9 @@ Damagetrack
 
 */
 
-function Character (name, order, stats, dice, track) {
+
+
+function WTCharacter(name, order, stats, dice, track) {
     this.Name = name;
     this.Order = order;
     this.Statblock = stats;
@@ -41,35 +43,48 @@ function DebugM(str) {
 
 }
 
-function ParseDicePool (poolstring) {
-    var normal = /(\d+)D/i.exec(poolstring);
-    if (normal != null) {
-        normal = parseInt(normal[1]);
+function ParseDicePool(poolstring) {
+    this.Normal = /(\d+)D/i.exec(poolstring);
+    if (this.Normal != null) {
+        this.Normal = parseInt(this.Normal[1]);
     } else {
-        normal = 0;
+        this.Normal = 0;
     }
 
-    var hard = /(\d+)HD/i.exec(poolstring);
-    if (hard != null) {
-        hard = parseInt(hard[1]);
+    this.Hard = /(\d+)HD/i.exec(poolstring);
+    if (this.Hard != null) {
+        this.Hard = parseInt(this.Hard[1]);
     } else {
-        hard = 0;
+        this.Hard = 0;
     }
 
-    var wiggle = /(\d+)W/i.exec(poolstring);
-    if (wiggle != null) {
-        wiggle = parseInt(wiggle[1]);
-    } else{
-        wiggle = 0;
+    this.Wiggle = /(\d+)W/i.exec(poolstring);
+    if (this.Wiggle != null) {
+        this.Wiggle = parseInt(this.Wiggle[1]);
+    } else {
+        this.Wiggle = 0;
     }
 
-    return {Normal:normal, Hard: hard, Wiggle:wiggle}
+    this.toString = function() {
+        var s = "";
+        if (this.Normal > 0) {
+            s += this.Normal + "D";
+        }
+        if (this.Hard > 0) {
+            s += this.Hard + "HD";   
+        }
+        if (this.Wiggle > 0) {
+            s += this.Wiggle + "WD";   
+        }
+        return s;
+    }
 }
 
 function Dicepool(name, pool) {
 
     this.Name = name;
-    this.BasePool = ParseDicePool(pool);
+    this.BasePool = new ParseDicePool(pool);
+    this.Poolstring = pool;
     this.BonusDice = 0;
     this.PenaltyDice = 0;
     this._ModifiedPool = null;
@@ -190,54 +205,54 @@ var KILLINGSYMBOL = "X";
 var OPENSYMBOL = "O";
 
 function DamageLocation(name, upper, wounds, carryover) {
-	
-	this.Name = name;
-	this.Upper = upper;
-	this.Track = wounds;
-	this.CarryOver = carryover;
 
-	this.toString = function () {
-	    return this.Name + " <= " + this.Upper + " " + this.Track + " ";
-	}
+    this.Name = name;
+    this.Upper = upper;
+    this.Track = wounds;
+    this.CarryOver = carryover;
+
+    this.toString = function () {
+        return this.Name + " <= " + this.Upper + " " + this.Track + "";
+    }
 
 }
 
 function Track(shock, killing, open) {
-	
-	this.Shock = shock;
-	this.Killing = killing;
-	this.Open = open;
-	
-	this.toString = function () {
-		retstring = "";
-		
-		for (var i=0; i < this.Killing; i++) {
-			retstring += KILLINGSYMBOL;
-		}
-		
-		for (var i=0; i < this.Shock; i++) {
-			retstring += SHOCKSYMBOL;
-		}
-		
-		for (var i=0; i < this.Open; i++) {
-			retstring += OPENSYMBOL;
-		}
-		
-		return retstring;
-	}
+
+    this.Shock = shock;
+    this.Killing = killing;
+    this.Open = open;
+
+    this.toString = function () {
+        retstring = "";
+
+        for (var i=0; i < this.Killing; i++) {
+            retstring += KILLINGSYMBOL;
+        }
+
+        for (var i=0; i < this.Shock; i++) {
+            retstring += SHOCKSYMBOL;
+        }
+
+        for (var i=0; i < this.Open; i++) {
+            retstring += OPENSYMBOL;
+        }
+
+        return retstring;
+    }
 }
 
 function DamageTrack(lar, hardlar, har, hardhar, harfirst, locs) {
-	
-	this.LAR = lar;
-	this.HardLAR = hardlar;
-	this.HAR = har;
-	this.HardHAR = hardhar;
-	this.HARFirst = harfirst;
-	this.Locations = locs;
-	
 
-/*
+    this.LAR = lar;
+    this.HardLAR = hardlar;
+    this.HAR = har;
+    this.HardHAR = hardhar;
+    this.HARFirst = harfirst;
+    this.Locations = locs;
+
+
+    /*
     Return type is:
     {
 		Heal: Heal, 
@@ -248,79 +263,79 @@ function DamageTrack(lar, hardlar, har, hardhar, harfirst, locs) {
 		Locations:Locations
 	}
 */
-	this.ParseDamage = function (damagestring) {
-	    var ShockAmount = /(\d+)S/i.exec(damagestring);
-	    if (ShockAmount != null) {
-	        ShockAmount = parseInt(ShockAmount[1]);
-	    } else {
-	        ShockAmount = 0;
-	    }
+    this.ParseDamage = function (damagestring) {
+        var ShockAmount = /(\d+)S/i.exec(damagestring);
+        if (ShockAmount != null) {
+            ShockAmount = parseInt(ShockAmount[1]);
+        } else {
+            ShockAmount = 0;
+        }
 
-	    var KillingAmount = /(\d+)K/i.exec(damagestring);
-	    if (KillingAmount != null) {
-	        KillingAmount = parseInt(KillingAmount[1]);
-	    } else {
-	        KillingAmount = 0;
-	    }
+        var KillingAmount = /(\d+)K/i.exec(damagestring);
+        if (KillingAmount != null) {
+            KillingAmount = parseInt(KillingAmount[1]);
+        } else {
+            KillingAmount = 0;
+        }
 
-	    var NP = /!/.test(damagestring);
-	    var Heal = /^H/i.test(damagestring);
+        var NP = /!/.test(damagestring);
+        var Heal = /^H/i.test(damagestring);
 
-	    var PenAmount = /P(\d+)/i.exec(damagestring);
-	    if (PenAmount != null) {
-	        PenAmount = parseInt(PenAmount[1]);
-	    } else {
-	        PenAmount = 0;
-	    }
+        var PenAmount = /P(\d+)/i.exec(damagestring);
+        if (PenAmount != null) {
+            PenAmount = parseInt(PenAmount[1]);
+        } else {
+            PenAmount = 0;
+        }
 
-	    var AllLoc = /\*$/.test(damagestring);
-	    var NoHead = /%$/.test(damagestring);
+        var AllLoc = /\*$|\s+ALL$/i.test(damagestring);
+        var NoHead = /%$|\s+nohead$/i.test(damagestring);
 
-	    if (AllLoc) {
-	        Locations = [];
-	        for (var i = 0; i < this.Locations.length; i++) {
-	            Locations.push(this.Locations[i].Upper);
-	        }
+        if (AllLoc) {
+            Locations = [];
+            for (var i = 0; i < this.Locations.length; i++) {
+                Locations.push(this.Locations[i].Upper);
+            }
 
-	    } else if (NoHead) {
-	        Locations = [];
-	        if (this.Locations.length > 1) {
-	            for (var i = 0; i < this.Locations.length - 1; i++) {
-	                Locations.push(this.Locations[i].Upper);
-	            }
-	        } else {
-	            Locations = [10];
-	        }
-	    }
-	    else {
-	        var Locations = /\s+([\d,]+)$/.exec(damagestring);
-	        Locations = Locations[1].split(",");
-	        for (var i = 0; i < Locations.length; i++) {
+        } else if (NoHead) {
+            Locations = [];
+            if (this.Locations.length > 1) {
+                for (var i = 0; i < this.Locations.length - 1; i++) {
+                    Locations.push(this.Locations[i].Upper);
+                }
+            } else {
+                Locations = [10];
+            }
+        }
+        else {
+            var Locations = /\s+([\d,]+)$/.exec(damagestring);
+            Locations = Locations[1].split(",");
+            for (var i = 0; i < Locations.length; i++) {
 
-	            Locations[i] = parseInt(Locations[i]);
+                Locations[i] = parseInt(Locations[i]);
 
-	        }
-	    }
-	    return {
-	        Heal: Heal,
-	        Shock: ShockAmount,
-	        Killing: KillingAmount,
-	        NonPhysical: NP,
-	        Pen: PenAmount,
-	        Locations: Locations
-	    };
-	}
-	
-	this.PickLocation = function (number) {
-		for (var i=0; i < this.Locations.length; i++) {
-			if (number <= this.Locations[i].Upper)
-				return this.Locations[i];
-		}
-	}
+            }
+        }
+        return {
+            Heal: Heal,
+            Shock: ShockAmount,
+            Killing: KillingAmount,
+            NonPhysical: NP,
+            Pen: PenAmount,
+            Locations: Locations
+        };
+    }
 
-	this.TakeDamage = function (damagestring) {
-	    DamageObject = this.ParseDamage(damagestring);
-	    /*
+    this.PickLocation = function (number) {
+        for (var i=0; i < this.Locations.length; i++) {
+            if (number <= this.Locations[i].Upper)
+                return this.Locations[i];
+        }
+    }
+
+    this.TakeDamage = function (damagestring) {
+        DamageObject = this.ParseDamage(damagestring);
+        /*
 	    if (DebugMessages) {
 	    console.log("Here's out DamageObject");
 	    console.log("Heal" + DamageObject.Heal);
@@ -332,118 +347,97 @@ function DamageTrack(lar, hardlar, har, hardhar, harfirst, locs) {
 	    }
 	    */
 
-	    //Our first main decision, are we healing damage or taking it
-	    if (DamageObject.Heal) {
-	        if (DebugMessages) {
-	            console.log("Healing!");
-	        }
-	        //Hooray! The easiest thing to do
-	        for (var i = 0; i < DamageObject.Locations.length; i++) {
-	            var t = this.PickLocation(DamageObject.Locations[i]);
+        //Our first main decision, are we healing damage or taking it
+        if (DamageObject.Heal) {
 
-	            var ShockHealAmount = (DamageObject.Shock >= t.Track.Shock) ? t.Track.Shock : DamageObject.Shock;
-	            var KillingHealAmount = DamageObject.Killing >= t.Track.Killing ? t.Track.Killing : DamageObject.Killing;
+            DebugM("Healing!");
 
-	            //Healing doesn't carry over to additional locations
+            //Hooray! The easiest thing to do
+            for (var i = 0; i < DamageObject.Locations.length; i++) {
+                var t = this.PickLocation(DamageObject.Locations[i]);
 
-	            t.Track.Shock -= ShockHealAmount;
-	            t.Track.Open += ShockHealAmount;
+                var ShockHealAmount = (DamageObject.Shock >= t.Track.Shock) ? t.Track.Shock : DamageObject.Shock;
+                var KillingHealAmount = DamageObject.Killing >= t.Track.Killing ? t.Track.Killing : DamageObject.Killing;
 
-	            t.Track.Killing -= KillingHealAmount;
-	            t.Track.Open += KillingHealAmount;
-	        }
+                //Healing doesn't carry over to additional locations
 
+                t.Track.Shock -= ShockHealAmount;
+                t.Track.Open += ShockHealAmount;
 
-	    } else {
-	        //We're making things hurt
-	        if (DebugMessages) {
-	            console.log("Damaging");
-	        }
-
-	        if (!DamageObject.NonPhysical) {
-	            //If we're not non-phys
-	            if (DebugMessages) {
-	                console.log("Applying Armor values");
-	            }
-	            var AppHAR;
-	            var AppLAR;
-
-	            if (this.HardLAR) {
-	                AppLAR = this.LAR;
-	            } else {
-	                AppLAR = Math.max(this.LAR - DamageObject.Pen, 0)
-	            }
-
-	            if (this.HardHAR) {
-	                AppHAR = this.HAR;
-	            } else {
-	                AppHAR = Math.max(this.HAR - DamageObject.Pen, 0)
-	            }
-
-	            if (DebugMessages) {
-
-	                console.log("AppHAR is " + AppHAR);
-	                console.log("AppLAR is " + AppLAR);
-
-	            }
+                t.Track.Killing -= KillingHealAmount;
+                t.Track.Open += KillingHealAmount;
+            }
 
 
-	            if (this.HARFirst) {
-	                //Apply HAR first
-
-	                if (DebugMessages) {
-	                    console.log("Applying HAR First");
-	                    console.log("Shock is " + DamageObject.Shock);
-	                    console.log("Killing is " + DamageObject.Killing);
-	                }
-
-	                DamageObject.Shock = Math.max(DamageObject.Shock - AppHAR, 0);
-	                DamageObject.Killing = Math.max(DamageObject.Killing - AppHAR, 0);
-
-	                if (DebugMessages) {
-	                    console.log("Applied HAR First");
-	                    console.log("Shock is " + DamageObject.Shock);
-	                    console.log("Killing is " + DamageObject.Killing);
-	                }
+        } else {
+            //We're making things hurt
+            DebugM("Damaging");
 
 
-	                //Apply LAR
+            if (!DamageObject.NonPhysical) {
+                //If we're not non-phys
 
-	                if (AppLAR > 0) {
+                DebugM("Applying Armor values");
+                var AppHAR;
+                var AppLAR;
 
-	                    DamageObject.Shock = Math.min(DamageObject.Shock, 1);
+                if (this.HardLAR) {
+                    AppLAR = this.LAR;
+                } else {
+                    AppLAR = Math.max(this.LAR - DamageObject.Pen, 0)
+                }
 
-	                    var KillToShock = Math.min(DamageObject.Killing, AppLAR);
-	                    DamageObject.Killing = DamageObject.Killing - KillToShock;
-	                    DamageObject.Shock += KillToShock;
-	                }
+                if (this.HardHAR) {
+                    AppHAR = this.HAR;
+                } else {
+                    AppHAR = Math.max(this.HAR - DamageObject.Pen, 0)
+                }
 
-	            } else {
-	                //Apply LAR first	 
-	                if (DebugMessages) {
-	                    console.log("Applying LAR First");
-	                    console.log("Shock is " + DamageObject.Shock);
-	                    console.log("Killing is " + DamageObject.Killing);
-	                }
+                DebugM("AppHAR is " + AppHAR + "\nAppLAR is " + AppLAR);
 
-	                if (AppLAR > 0) {
-	                    DamageObject.Shock = Math.min(DamageObject.Shock, 1);
+                if (this.HARFirst) {
+                    //Apply HAR first
 
-	                    var KillToShock = Math.min(DamageObject.Killing, AppLAR);
-	                    DamageObject.Killing = DamageObject.Killing - KillToShock;
-	                    DamageObject.Shock += KillToShock;
-	                }
+                    DebugM("Applying HAR First\n" + "Shock is " + DamageObject.Shock + "\nKilling is " + DamageObject.Killing);
 
-	                //Apply HAR
-	                DamageObject.Shock = Math.max(DamageObject.Shock - AppHAR, 0);
-	                DamageObject.Killing = Math.max(DamageObject.Killing - AppHAR, 0);
-	            }
+                    DamageObject.Shock = Math.max(DamageObject.Shock - AppHAR, 0);
+                    DamageObject.Killing = Math.max(DamageObject.Killing - AppHAR, 0);
 
-	        }
+                    DebugM("Applied HAR First" + "\nShock is " + DamageObject.Shock + "\nKilling is " + DamageObject.Killing);
+
+                    //Apply LAR
+
+                    if (AppLAR > 0) {
+
+                        DamageObject.Shock = Math.min(DamageObject.Shock, 1);
+
+                        var KillToShock = Math.min(DamageObject.Killing, AppLAR);
+                        DamageObject.Killing = DamageObject.Killing - KillToShock;
+                        DamageObject.Shock += KillToShock;
+                    }
+
+                } else {
+                    //Apply LAR first	 
+                    DebugM("Applying LAR First" + "\nShock is " + DamageObject.Shock + "Killing is " + DamageObject.Killing);
+
+                    if (AppLAR > 0) {
+                        DamageObject.Shock = Math.min(DamageObject.Shock, 1);
+
+                        var KillToShock = Math.min(DamageObject.Killing, AppLAR);
+                        DamageObject.Killing = DamageObject.Killing - KillToShock;
+                        DamageObject.Shock += KillToShock;
+                    }
+
+                    //Apply HAR
+                    DamageObject.Shock = Math.max(DamageObject.Shock - AppHAR, 0);
+                    DamageObject.Killing = Math.max(DamageObject.Killing - AppHAR, 0);
+                }
+
+            }
 
 
-	        /*Armor has been applied or doesn't matter.*/
-	        /*
+            /*Armor has been applied or doesn't matter.*/
+            /*
 	        if (DebugMessages) {
 	        console.log("Armor has been applied");
 	        console.log("Here's out DamageObject");
@@ -456,110 +450,101 @@ function DamageTrack(lar, hardlar, har, hardhar, harfirst, locs) {
 	        }
 	        */
 
-	        for (var i = 0; i < DamageObject.Locations.length; i++) {
-	            var target = this.PickLocation(DamageObject.Locations[i]);
-	            var IncShock = DamageObject.Shock;
-	            var IncKilling = DamageObject.Killing;
+            for (var i = 0; i < DamageObject.Locations.length; i++) {
+                var target = this.PickLocation(DamageObject.Locations[i]);
+                var IncShock = DamageObject.Shock;
+                var IncKilling = DamageObject.Killing;
 
-	            var DamageLoss = false;
+                var DamageLoss = false;
 
-	            if (DebugMessages) {
-	                console.log("Beginning damage stuff.\nTarget is " + target + "\nIncShock is " + IncShock + "\nIncKilling is " + IncKilling)
-	            }
+                DebugM("Beginning damage stuff.\nTarget is " 
+                           + target + "\nIncShock is " + IncShock + 
+                           "\nIncKilling is " + IncKilling);
 
-	            while ((IncKilling + IncShock) > 0) {
-	                if (DebugMessages) {
-	                    console.log("While Loop!\nTarget is " + target.Name + " " + target.Track.toString() + "\nIncShock is " + IncShock + "\nIncKilling is " + IncKilling)
-	                }
-	                //If there's open boxes, they get killed with killing first
 
-	                if (target.Track.Open > 0) {
-	                    if (IncKilling > 0) {
-	                        if (DebugMessages) {
-	                            console.log("Applying killing damage to empty boxes");
-	                        }
-	                        var appKill = Math.min(target.Track.Open, IncKilling);
-	                        target.Track.Open -= appKill;
-	                        IncKilling -= appKill;
-	                        target.Track.Killing += appKill;
-	                        if (DebugMessages) {
-	                            console.log("Applied " + appKill + " killing. IncKilling is now " + IncKilling);
-	                            console.log("IncShock is " + IncShock + "\nIncKilling is " + IncKilling);
-	                        }
-	                    } else {
-	                        if (DebugMessages) {
-	                            console.log("Applying shock damage to empty boxes");
-	                        }
-	                        var appShock = Math.min(target.Track.Open, IncShock);
-	                        target.Track.Open -= appShock;
-	                        target.Track.Shock += appShock;
-	                        IncShock -= appShock;
-	                        if (DebugMessages) {
-	                            console.log("Applied " + appShock + " shock. IncShock is now " + IncShock + " " + target.Track + "");
-	                            console.log("IncShock is " + IncShock + "\nIncKilling is " + IncKilling);
-	                        }
-	                    }
+                while ((IncKilling + IncShock) > 0) {
+                    DebugM("While Loop!\nTarget is " + target.Name + " " + 
+                               target.Track.toString() + "\nIncShock is " + 
+                               IncShock + "\nIncKilling is " + IncKilling);
+                    //If there's open boxes, they get killed with killing first
 
-	                } else if (target.Track.Shock > 0) {
-	                    //No open boxes. If there's shock boxes, we make them killing
-	                    if (DebugMessages) {
-	                        console.log("Converting shock boxes to killing");
-	                    }
-	                    if (IncKilling > 0) {
-	                        //Convert some killing to shock
-	                        IncKilling--;
-	                        IncShock += 2;
+                    if (target.Track.Open > 0) {
+                        if (IncKilling > 0) {
+                            DebugM("Applying killing damage to empty boxes");
 
-	                    } else {
-	                        var appShock = Math.min(target.Track.Shock, IncShock);
-	                        target.Track.Shock -= appShock;
-	                        target.Track.Killing += appShock;
-	                        IncShock -= appShock;
-	                    }
+                            var appKill = Math.min(target.Track.Open, IncKilling);
+                            target.Track.Open -= appKill;
+                            IncKilling -= appKill;
+                            target.Track.Killing += appKill;
+                            DebugM("Applied " + appKill + " killing. IncKilling is now " + IncKilling + 
+                                       "\nIncShock is " + IncShock + "\nIncKilling is " + IncKilling);
 
-	                } else {
-	                    //We've got neither shock nor open boxes, just killing
-	                    if (DebugMessages) {
-	                        console.log("We don't have either shock boxes nor empty boxes.");
-	                        console.log("IncShock is " + IncShock + "\nIncKilling is " + IncKilling);
-	                        console.log("Target is " + target.Track + "");
-	                    }
+                        } else {
+                            DebugM("Applying shock damage to empty boxes");
 
-	                    if (target.CarryOver != null) {
-	                        //Send it up the queue
+                            var appShock = Math.min(target.Track.Open, IncShock);
+                            target.Track.Open -= appShock;
+                            target.Track.Shock += appShock;
+                            IncShock -= appShock;
+                            DebugM("Applied " + appShock + " shock. IncShock is now " + IncShock + " " + target.Track + "" +
+                                       "\nIncShock is " + IncShock + "\nIncKilling is " + IncKilling);
+                        }
 
-	                        if (DebugMessages) {
-	                            console.log("Carrying over damage");
-	                            console.log("Our target's carryover spot is " + target.CarryOver);
-	                            console.log("Our new DamageString is going to be:");
-	                            console.log("" + IncShock + "S" + IncKilling + "K! " + target.CarryOver)
-	                        }
+                    } else if (target.Track.Shock > 0) {
+                        //No open boxes. If there's shock boxes, we make them killing
+                        DebugM("Converting shock boxes to killing");
 
-	                        var newDamStr = "" + IncShock + "S" + IncKilling + "K! " + target.CarryOver
+                        if (IncKilling > 0) {
+                            //Convert some killing to shock
+                            IncKilling--;
+                            IncShock += 2;
+
+                        } else {
+                            var appShock = Math.min(target.Track.Shock, IncShock);
+                            target.Track.Shock -= appShock;
+                            target.Track.Killing += appShock;
+                            IncShock -= appShock;
+                        }
+
+                    } else {
+                        //We've got neither shock nor open boxes, just killing
+                        DebugM("We don't have either shock boxes nor empty boxes." + 
+                                   "\nIncShock is " + IncShock + "\nIncKilling is " + IncKilling + 
+                                   "\nTarget is " + target.Track + "");
+
+                        if (target.CarryOver != null) {
+                            //Send it up the queue
+
+                            DebugM("Carrying over damage" + 
+                                       "\nOur target's carryover spot is " + target.CarryOver +
+                                       "\nOur new DamageString is going to be:" + 
+                                       "\n" + IncShock + "S" + IncKilling + "K! " + target.CarryOver)
+
+                            var newDamStr = "" + IncShock + "S" + IncKilling + "K! " + target.CarryOver
 
                             //After you blowed it up, you can't carry over from it anymore.
-	                        target.CarryOver = null;
+                            target.CarryOver = null;
 
-	                        this.TakeDamage(newDamStr);
-	                        IncKilling = 0;
-	                        IncShock = 0;
-	                    } else {
-	                        DamageLoss = true;
-	                        IncKilling = 0;
-	                        IncShock = 0;
-	                    }
+                            this.TakeDamage(newDamStr);
+                            IncKilling = 0;
+                            IncShock = 0;
+                        } else {
+                            DamageLoss = true;
+                            IncKilling = 0;
+                            IncShock = 0;
+                        }
 
-	                }
+                    }
 
-	            }
-
-
-	        }
+                }
 
 
-	    }
+            }
 
-	}
+
+        }
+
+    }
 
     this.StatusString = function () {
         var out = "I'm a debug damage track.\n"
@@ -575,21 +560,21 @@ function DamageTrack(lar, hardlar, har, hardhar, harfirst, locs) {
 
 /*Testing stuff*/
 
-var DebugMessages = true;
+var DebugMessages = false;
 
 test1 = new DamageTrack(0,false,0,false,false,[]);
 
 testDO1 = test1.ParseDamage("H3S3K 10");
 
 function HumanTrack(extratough) {
-    
+
     var locs =[ new DamageLocation("Left Leg", 1, new Track(0, 0, 5 + extratough), 7), 
-                new DamageLocation("Right Leg", 2, new Track(0,0,5+extratough),7), 
-                new DamageLocation("Left Arm", 4, new Track(0,0,5+extratough), 7),
-                new DamageLocation("Right Arm", 6, new Track(0,0,5+extratough), 7),
-                new DamageLocation("Torso", 9, new Track(0,0,10+extratough), null),
-                new DamageLocation("Head", 10, new Track(0,0,4+extratough), null)]
-    
+               new DamageLocation("Right Leg", 2, new Track(0,0,5+extratough),7), 
+               new DamageLocation("Left Arm", 4, new Track(0,0,5+extratough), 7),
+               new DamageLocation("Right Arm", 6, new Track(0,0,5+extratough), 7),
+               new DamageLocation("Torso", 9, new Track(0,0,10+extratough), null),
+               new DamageLocation("Head", 10, new Track(0,0,4+extratough), null)]
+
     return new DamageTrack(0, false, 0, false, true, locs);
 }
 
@@ -599,3 +584,17 @@ test2.TakeDamage("3S 5");
 
 var dicetest1 = new Dicepool("Steve", "6D2HD3W");
 dicetest1.Roll();
+
+function CreateDisplayTestGroup() {
+ 
+    var dudes = [];
+    
+    dude1 = new WTCharacter("Steve", 1, "Steve's statblock", [new Dicepool("Brawling", "7D1W"), new Dicepool("Shooting", "6D2HD")], HumanTrack(0));
+    dude2 = new WTCharacter("Bob", 2, "Bob's statblock", [new Dicepool("Brawling", "3D1W"), new Dicepool("Shooting", "4D2HD1W")], HumanTrack(0));
+    dude3 = new WTCharacter("Jane", 3, "Jane's statblock", [new Dicepool("Stability", "15D"), new Dicepool("Mind", "7D1W"), new Dicepool("Shooting", "6D2HD")], HumanTrack(0));
+    
+    dudes = [dude1, dude2, dude3];
+    
+    return dudes;
+}
+
