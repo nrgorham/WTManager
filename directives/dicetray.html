@@ -50,8 +50,8 @@
             </div>
             <div class="row">
                 <div class="col-md-2 col-md-offset-5">
-                    <button class="btn" ng-disabled="dieform.$invalid" ng-click="Roll()">Roll</button>
-                    <button class="btn" ng-show="CurrentRoll" ng-click="Clear()">Clear</button>
+                    <button class="btn btn-lg btn-success" ng-disabled="dieform.$invalid" ng-click="Roll()">Roll</button>
+                    <button class="btn btn-lg btn-danger" ng-show="CurrentRoll" ng-click="Clear()">Clear</button>
                 </div>
             </div>
             <div ng-show="CurrentRoll">
@@ -68,8 +68,8 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="r in CurrentRoll.rolls track by $index" ng-class="TableHighlight($index)" ng-hide="r==0&&CurrentRoll.wiggle==0">
-                            <td><strong>{{$index+1}}</strong></td>
-                            <td>{{r}}</td>
+                            <td class="text-center"><strong>{{$index+1}}</strong></td>
+                            <td class="text-center">{{r}}</td>
                             <td><button class="btn btn-danger" ng-click="Gobble($index)">-</button></td>
                             <td><button class="btn btn-success" ng-click="Wiggle($index)">+</button></td>
                         </tr>
