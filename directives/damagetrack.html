@@ -19,18 +19,30 @@
                 <tr>
                     <th>Name</th>
                     <th>Location</th>
+                    <th>Damage</th>
+                    <!--
                     <th>Empty</th>
                     <th>Shock</th>
                     <th>Killing</th>
+                    !-->
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="t in track.Locations track by $index" ng-class="TableHighlight(t)">
                     <td>{{t.Name}}</td>
                     <td>{{t.Upper}}</td>
+                    <td>
+                        <progress>
+                            <bar value="t.Track.Open*100.0/(t.Track.Open+t.Track.Shock+t.Track.Killing)" type="success"><span>{{t.Track.Open}}</span></bar>
+                            <bar value="t.Track.Shock*100.0/(t.Track.Open+t.Track.Shock+t.Track.Killing)" type="warning"><span>{{t.Track.Shock}}</span></bar>
+                            <bar value="t.Track.Killing*100.0/(t.Track.Open+t.Track.Shock+t.Track.Killing)" type="danger"><span>{{t.Track.Killing}}</span></bar>
+                        </progress>
+                    </td>
+                    <!--
                     <td>{{t.Track.Open}}</td>
                     <td>{{t.Track.Shock}}</td>
                     <td>{{t.Track.Killing}}</td>
+                    !-->
                 </tr>
             </tbody>  
         </table>

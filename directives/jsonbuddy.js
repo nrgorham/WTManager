@@ -1,10 +1,9 @@
 app.directive('jsonBuddy', function() {
     return {
         restrict:"E",
-        replace:true,
+        replace:false,
         scope:{
-            dude: "=",
-            test:"="
+            dude: "="
         },
         templateUrl:"directives/jsonbuddy.html",
         link:function (scope, elem, attr) {

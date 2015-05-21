@@ -1,7 +1,7 @@
 app.directive('damageTrack', function() {
     return {
         restrict:"E",
-        replace:true,
+        replace:false,
         scope: {
             track:"="
         },

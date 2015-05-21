@@ -1,65 +1,101 @@
-<div class="panel panel-info">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-            <span>{{dice.Name}}</span>
-            <button class="btn navbar-right btn-sm btn-danger">X</button>
-        </h3>
-    </div>
-    <div class="panel-body">
-        <div ng-form="dieform">
-            <div class="row">
-                <div class="col-sm-4">
-                    <span class="label label-primary">Normal Dice</span>
-                    <input type="number" min="0" ng-model="dice.BasePool.Normal">
-                </div>
-                <div class="col-sm-4">
-                    <span class="label label-warning">Hard Dice</span>
-                    <input type="number" min="0" ng-model="dice.BasePool.Hard">
-                </div>
-                <div class="col-sm-4">
-                    <span class="label label-success">Wiggle Dice</span>
-                    <input type="number" min="0" ng-model="dice.BasePool.Wiggle">
-                </div>
+<accordion close-others="true">
+    <accordion-group ng-repeat="x in dice" class="panel panel-info">
+        <accordion-heading>
+            <div class="panel-heading" ng-init="x.EditMode=false">
+                <h3 class="panel-title">
+                    <span>{{x.Name}} - {{PrettyPrint(x)}}</span>
+                </h3>
             </div>
-            <div class="row">
-                <div class="col-sm-3 col-sm-offset-3">
-                    <button class="btn btn-success btn-sm" ng-click="incrementBonus()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                    <span>Bonus Dice ({{dice.BonusDice}})</span>
-                    <button class="btn btn-danger btn-sm" ng-click="decrementBonus()"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+        </accordion-heading>
+        <div class="panel-body">
+            <div ng-form="dieform">
+                <div>
+                    <div class="input-group">
+                        <label class="control-label">Edit Mode
+                            <input type="checkbox" ng-model="x.EditMode">
+                        </label>
+                    </div>
+                    <div ng-show="x.EditMode">
+                        <label>Pool Name
+                            <input type="text" ng-model="x.Name">
+                        </label>
+                        <button class="button btn-danger btn-large" ng-click="DeleteDiceGroup(x)">DELETE</button>
+                    </div>
                 </div>
-                <div class="col-sm-3">
-                    <button class="btn btn-success btn-sm" ng-click="incrementPenalty()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                    <span >Penalty Dice ({{dice.PenaltyDice}})</span>
-                    <button class="btn btn-danger btn-sm" ng-click="decrementPenalty()"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-2 col-sm-offset-5">
-                    <button class="btn btn-success" ng-disabled="dieform.$invalid" ng-click="Roll()">Roll</button>
-                    <button class="btn btn-danger" ng-show="CurrentRoll" ng-click="Clear()">Clear</button>
-                </div>
-            </div>
-            <div ng-show="CurrentRoll">
-                <table class="table table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Height</th>
-                            <th>Width</th>
-                            <th>Gobble</th>
-                            <th>Wiggle <strong>({{CurrentRoll.wiggle}})</strong></th>
-                        </tr>
-                    </thead>
+                <table ng-hide="x.EditMode">
                     <tbody>
-                        <tr ng-repeat="r in CurrentRoll.rolls track by $index" ng-class="TableHighlight($index)" ng-hide="r==0&&CurrentRoll.wiggle==0">
-                            <td class="text-center"><strong>{{$index+1}}</strong></td>
-                            <td class="text-center">{{r}}</td>
-                            <td><button class="btn btn-danger" ng-click="Gobble($index)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></td>
-                            <td><button class="btn btn-success" ng-click="Wiggle($index)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></td>
+                        <tr class="form-inline">
+                            <td>
+                                <div class="input-group">
+                                    <span class="label label-info">Normal Dice</span>
+                                    <input class="form-control" type="number" min="0" ng-model="x.BasePool.Normal">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group">
+                                    <span class="label label-warning">Hard Dice</span>
+                                    <input class="form-control" type="number" min="0" ng-model="x.BasePool.Hard">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group">
+                                    <span class="label label-success">Wiggle Dice</span>
+                                    <input class="form-control" type="number" min="0" ng-model="x.BasePool.Wiggle">
+                                </div>
+                            </td>
                         </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button class="btn btn-success" ng-click="incrementBonus(x)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                <span>Bonus Dice ({{x.BonusDice}})</span>
+                                <button class="btn btn-danger" ng-click="decrementBonus(x)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button class="btn btn-success" ng-click="incrementPenalty(x)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                <span>Penalty Dice ({{x.PenaltyDice}})</span>
+                                <button class="btn btn-danger" ng-click="decrementPenalty(x)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div class="input-group center-block">
+                                    <button class="btn btn-success" ng-disabled="dieform.$invalid" ng-click="Roll(x)">Roll</button>
+                                    <button class="btn btn-danger" ng-show="x.CurrentRoll" ng-click="Clear(x)">Clear</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr ng-show="x.CurrentRoll">
+                            <td colspan="3">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Height</th>
+                                            <th>Width</th>
+                                            <th>Gobble</th>
+                                            <th ng-hide="x.CurrentRoll.wiggle==0">Wiggle <strong>({{x.CurrentRoll.wiggle}})</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="r in x.CurrentRoll.rolls track by $index" ng-class="TableHighlight(x,$index)" ng-hide="r==0&&x.CurrentRoll.wiggle==0">
+                                            <td><strong>{{$index+1}}</strong></td>
+                                            <td>{{r}}</td>
+                                            <td><button class="btn btn-danger" ng-click="Gobble(x,$index)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></td>
+                                            <td ng-hide="x.CurrentRoll.wiggle==0"><button class="btn btn-success" ng-click="Wiggle(x,$index)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></td>
+                                        </tr>
 
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+
+    </accordion-group>
+    <div>
+        <button class="btn btn-info btn-block" ng-click="NewDiceGroup()">New</button>
     </div>
-</div>
+</accordion>

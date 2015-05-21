@@ -1,4 +1,4 @@
-var app = angular.module('WTManager', [])
+var app = angular.module('WTManager', ['ui.bootstrap'])
     .controller('myCtrl', ['$scope', function($scope) {
     
     var self=this;

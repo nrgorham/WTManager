@@ -131,9 +131,25 @@ function Dicepool(name, pool) {
 
             this._ModifiedPool = { Normal: p, Hard: h, Wiggle: w };
             this.Rollable = true;
+            this.PrettyString();
         }
     }
 
+    this.PrettyString = function() {
+        var ret = "";
+        
+        if (this.BasePool.Normal > 0) {
+            ret += this.BasePool.Normal + "D"   
+        }
+        if (this.BasePool.Hard > 0 ) {
+            ret += this.BasePool.Hard + "HD"   
+        }
+        if (this.BasePool.Wiggle > 0 ) {
+            ret += this.BasePool.Wiggle + "W"   
+        }
+        this.Poolstring = ret;
+    }
+    
     this.SimpleRoll = function () {
         if (this.Rollable) {
             this.Update();
