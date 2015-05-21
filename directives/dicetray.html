@@ -1,0 +1,82 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{dice.Name}} <button class="btn right btn-danger">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div ng-form="dieform">
+            <div class="row">
+                <div class="col-md-2">
+                    <span class="label label-primary">Normal Dice</span>
+                    <input type="number" min="0" ng-model="dice.BasePool.Normal">
+                </div>
+                <div class="col-md-2">
+                    <span class="label label-warning">Hard Dice</span>
+                    <input type="number" min="0" ng-model="dice.BasePool.Hard">
+                </div>
+                <div class="col-md-2">
+                    <span class="label label-success">Wiggle Dice</span>
+                    <input type="number" min="0" ng-model="dice.BasePool.Wiggle">
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="col-md-2">
+                        <span>Bonus Dice</span>
+                    </div>
+                    <div class="col-md-1 text-center">
+                        <div class="row">
+                            <button class="btn btn-success" ng-click="incrementBonus()">+</button>
+                        </div>
+                        <div class="row">
+                            <span >{{dice.BonusDice}}</span>
+                        </div>
+                        <div class="row">
+                            <button class="btn btn-danger" ng-click="decrementBonus()">-</button>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <span >Penalty Dice</span>
+                    </div>
+                    <div class="col-md-1 text-center">
+                        <div class="row">
+                            <button class="btn btn-success" ng-click="incrementPenalty()">+</button>
+                        </div>
+                        <div class="row">
+                            <span>{{dice.PenaltyDice}}</span>
+                        </div>
+                        <div class="row">
+                            <button class="btn btn-danger" ng-click="decrementPenalty()">-</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 col-md-offset-5">
+                    <button class="btn" ng-disabled="dieform.$invalid" ng-click="Roll()">Roll</button>
+                    <button class="btn" ng-show="CurrentRoll" ng-click="Clear()">Clear</button>
+                </div>
+            </div>
+            <div ng-show="CurrentRoll">
+                <h3>Test!</h3>
+                <p>{{CurrentRoll}}</p>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Height</th>
+                            <th>Width</th>
+                            <th>Gobble</th>
+                            <th>Wiggle <strong>({{CurrentRoll.wiggle}})</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="r in CurrentRoll.rolls track by $index" ng-class="TableHighlight($index)" ng-hide="r==0&&CurrentRoll.wiggle==0">
+                            <td><strong>{{$index+1}}</strong></td>
+                            <td>{{r}}</td>
+                            <td><button class="btn btn-danger" ng-click="Gobble($index)">-</button></td>
+                            <td><button class="btn btn-success" ng-click="Wiggle($index)">+</button></td>
+                        </tr>
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

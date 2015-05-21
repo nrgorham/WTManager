@@ -134,6 +134,24 @@ function Dicepool(name, pool) {
         }
     }
 
+    this.SimpleRoll = function () {
+        if (this.Rollable) {
+            this.Update();
+            var rolls = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            var roll = 0;
+            for (var i = 0; i < this._ModifiedPool.Normal; i++) {
+                roll = Math.floor(Math.random() * 10) + 1;
+                rolls[roll - 1]++;
+            }
+            rolls[9] += this._ModifiedPool.Hard;
+            return {rolls:rolls, wiggle:this._ModifiedPool.Wiggle}
+
+        } else {
+            return {rolls:[0,0,0,0,0,0,0,0,0,0],wiggle:0};   
+        }
+
+    }
+
     this.Roll = function () {
         if (this.Rollable) {
             var rolls = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -458,14 +476,14 @@ function DamageTrack(lar, hardlar, har, hardhar, harfirst, locs) {
                 var DamageLoss = false;
 
                 DebugM("Beginning damage stuff.\nTarget is " 
-                           + target + "\nIncShock is " + IncShock + 
-                           "\nIncKilling is " + IncKilling);
+                       + target + "\nIncShock is " + IncShock + 
+                       "\nIncKilling is " + IncKilling);
 
 
                 while ((IncKilling + IncShock) > 0) {
                     DebugM("While Loop!\nTarget is " + target.Name + " " + 
-                               target.Track.toString() + "\nIncShock is " + 
-                               IncShock + "\nIncKilling is " + IncKilling);
+                           target.Track.toString() + "\nIncShock is " + 
+                           IncShock + "\nIncKilling is " + IncKilling);
                     //If there's open boxes, they get killed with killing first
 
                     if (target.Track.Open > 0) {
@@ -477,7 +495,7 @@ function DamageTrack(lar, hardlar, har, hardhar, harfirst, locs) {
                             IncKilling -= appKill;
                             target.Track.Killing += appKill;
                             DebugM("Applied " + appKill + " killing. IncKilling is now " + IncKilling + 
-                                       "\nIncShock is " + IncShock + "\nIncKilling is " + IncKilling);
+                                   "\nIncShock is " + IncShock + "\nIncKilling is " + IncKilling);
 
                         } else {
                             DebugM("Applying shock damage to empty boxes");
@@ -487,7 +505,7 @@ function DamageTrack(lar, hardlar, har, hardhar, harfirst, locs) {
                             target.Track.Shock += appShock;
                             IncShock -= appShock;
                             DebugM("Applied " + appShock + " shock. IncShock is now " + IncShock + " " + target.Track + "" +
-                                       "\nIncShock is " + IncShock + "\nIncKilling is " + IncKilling);
+                                   "\nIncShock is " + IncShock + "\nIncKilling is " + IncKilling);
                         }
 
                     } else if (target.Track.Shock > 0) {
@@ -509,16 +527,16 @@ function DamageTrack(lar, hardlar, har, hardhar, harfirst, locs) {
                     } else {
                         //We've got neither shock nor open boxes, just killing
                         DebugM("We don't have either shock boxes nor empty boxes." + 
-                                   "\nIncShock is " + IncShock + "\nIncKilling is " + IncKilling + 
-                                   "\nTarget is " + target.Track + "");
+                               "\nIncShock is " + IncShock + "\nIncKilling is " + IncKilling + 
+                               "\nTarget is " + target.Track + "");
 
                         if (target.CarryOver != null) {
                             //Send it up the queue
 
                             DebugM("Carrying over damage" + 
-                                       "\nOur target's carryover spot is " + target.CarryOver +
-                                       "\nOur new DamageString is going to be:" + 
-                                       "\n" + IncShock + "S" + IncKilling + "K! " + target.CarryOver)
+                                   "\nOur target's carryover spot is " + target.CarryOver +
+                                   "\nOur new DamageString is going to be:" + 
+                                   "\n" + IncShock + "S" + IncKilling + "K! " + target.CarryOver)
 
                             var newDamStr = "" + IncShock + "S" + IncKilling + "K! " + target.CarryOver
 
@@ -586,15 +604,15 @@ var dicetest1 = new Dicepool("Steve", "6D2HD3W");
 dicetest1.Roll();
 
 function CreateDisplayTestGroup() {
- 
+
     var dudes = [];
-    
+
     dude1 = new WTCharacter("Steve", 1, "Steve's statblock", [new Dicepool("Brawling", "7D1W"), new Dicepool("Shooting", "6D2HD")], HumanTrack(0));
     dude2 = new WTCharacter("Bob", 2, "Bob's statblock", [new Dicepool("Brawling", "3D1W"), new Dicepool("Shooting", "4D2HD1W")], HumanTrack(0));
     dude3 = new WTCharacter("Jane", 3, "Jane's statblock", [new Dicepool("Stability", "15D"), new Dicepool("Mind", "7D1W"), new Dicepool("Shooting", "6D2HD")], HumanTrack(0));
-    
+
     dudes = [dude1, dude2, dude3];
-    
+
     return dudes;
 }
 

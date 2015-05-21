@@ -1,10 +1,12 @@
 var app = angular.module('WTManager', [])
-    .controller('myCtrl', [function() {
+    .controller('myCtrl', ['$scope', function($scope) {
     
     var self=this;
     
-    self.Characters = CreateDisplayTestGroup();
-    console.log(self.Characters);
+    $scope.Characters = CreateDisplayTestGroup();
+    
+    //self.Characters = CreateDisplayTestGroup();
+    //console.log(self.Characters);
     
 }]);
                           
