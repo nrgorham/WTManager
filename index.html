@@ -26,7 +26,6 @@
             </div>
         </div>
         <div class="container-fluid">
-            <p>Testing!</p>
             <div class="panel panel-primary" ng-repeat="x in Characters">
                 <div class="panel-heading">
                     <h3 class="panel-title">{{x.Name}}</h3>
@@ -34,24 +33,28 @@
                 <div class="panel-body">
                     <textarea class="form-control">{{x.Statblock}}</textarea>
 
-                    <dice-tray dice="d" ng-repeat="d in x.Dice"></dice-tray>
+                    <br>
                     
+                    <dice-tray dice="d" ng-repeat="d in x.Dice"></dice-tray>
+
                     <damage-track track="x.Track"></damage-track>
+                    
+                    <json-buddy dude="x"></json-buddy>
                     
                 </div>
             </div>
         </div>
-        </div>
 
 
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="angular.js"></script>
-    <script src="wtang.js"></script>
-    <script src="directives/dicetray.js"></script>
-    <script src="directives/damagetrack.js"></script>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="js/bootstrap.min.js"></script>
+        <script src="angular.js"></script>
+        <script src="wtang.js"></script>
+        <script src="directives/dicetray.js"></script>
+        <script src="directives/damagetrack.js"></script>
+        <script src="directives/jsonbuddy.js"></script>
     </body>
 </html>
