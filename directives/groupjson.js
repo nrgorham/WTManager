@@ -13,7 +13,8 @@ app.directive('groupJson', function() {
                 //console.log(scope.CharJSON);
             }
             scope.JSON2Group = function() {
-                scope.group = JSON.parse(scope.GroupJSON);
+                var t = JSON.parse(scope.GroupJSON);
+                scope.group = RestoreCharacters(t);
             }
             
         }

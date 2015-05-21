@@ -27,6 +27,53 @@ Damagetrack
 */
 
 
+function RestoreCharacters(data) {
+    console.log(data);
+    for (var i=0; i < data.length; i++) {
+
+        var newDice = [];
+        console.log(i);
+        console.log(data[i]);
+        /*
+        for (var t in data[i]) {
+            console.log(t);
+            console.log(data[i][t]);
+        }
+        
+        console.log(typeof data[i].Dice);
+        console.log(data[i]["Dice"]);
+        console.log(data[i].Dice);
+        */
+        
+        for (var dice_i=0; dice_i < data[i].Dice.length; dice_i++) {
+            newDice[dice_i] = 
+                new Dicepool(
+                data[i].Dice[dice_i].Name, 
+                data[i].Dice[dice_i].BasePool.Normal + "D" +
+                data[i].Dice[dice_i].BasePool.Hard + "HD" +
+                data[i].Dice[dice_i].BasePool.Wiggle + "W"
+            )
+            console.log("Built new dicepool")
+            console.log(newDice[dice_i]);
+        }
+        data[i].Dice = newDice;
+
+        //DamageTrack(lar, hardlar, har, hardhar, harfirst, locs)
+        var oldTrack = data[i].Track;
+        var newTrack = new DamageTrack(
+            oldTrack.LAR,
+            oldTrack.HardLAR,
+            oldTrack.HAR,
+            oldTrack.HardHAR,
+            oldTrack.HARFirst,
+            oldTrack.Locations
+        );
+        data[i].Track = newTrack;
+    }
+    
+    return data;
+}
+
 
 function WTCharacter(name, order, stats, dice, track) {
     this.Name = name;
@@ -137,7 +184,7 @@ function Dicepool(name, pool) {
 
     this.PrettyString = function() {
         var ret = "";
-        
+
         if (this.BasePool.Normal > 0) {
             ret += this.BasePool.Normal + "D"   
         }
@@ -149,7 +196,7 @@ function Dicepool(name, pool) {
         }
         this.Poolstring = ret;
     }
-    
+
     this.SimpleRoll = function () {
         if (this.Rollable) {
             this.Update();
