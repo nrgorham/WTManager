@@ -3,7 +3,9 @@ var app = angular.module('WTManager', ['ui.bootstrap'])
     
     var self=this;
     
-    $scope.Characters = CreateDisplayTestGroup();
+    $scope.Characters = [];
+        
+    //$scope.Characters = CreateDisplayTestGroup();
     
     //self.Characters = CreateDisplayTestGroup();
     //console.log(self.Characters);

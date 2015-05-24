@@ -3,16 +3,40 @@
         <h3 class="panel-title">Damage Track</h3>
     </div>
     <div class="panel-body">
-        <span class="label label-primary">LAR</span>
-        <input type="number" min="0" ng-model="track.LAR">
-        <span class="label label-warning">Hard LAR</span>
-        <input type="checkbox" ng-model="track.HardLAR">
-        <span class="label label-primary">HAR</span>
-        <input type="number" min="0" ng-model="track.HAR">
-        <span class="label label-warning">Hard HAR</span>
-        <input type="checkbox" ng-model="track.HardHAR">
-        <span class="label label-danger">HAR first?</span>
-        <input type="checkbox" ng-model="track.HARFirst">
+
+        <div class="form-inline">
+            <div class="input-group">
+                <span class="input-group-addon">LAR</span>
+                <input class="form-control" type="number" min="0" ng-model="track.LAR">
+                <span class="input-group-addon">Hardened?
+                    <input type="checkbox" ng-model="track.HardLAR" aria-label="Hardened?">
+                </span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">HAR</span>
+                <input class="form-control" type="number" min="0" ng-model="track.HAR">
+                <span class="input-group-addon">Hardened?
+                    <input type="checkbox" ng-model="track.HardHAR" aria-label="Hardened?">
+                </span>
+            </div>
+            <div class="input-group">
+                <p>Apply HAR first?
+                    <input type="checkbox" ng-model="track.HARFirst">
+                </p>
+            </div>
+        </div>
+        <!--
+<span class="label label-primary">LAR</span>
+<input type="number" min="0" ng-model="track.LAR">
+<span class="label label-warning">Hard LAR</span>
+<input type="checkbox" ng-model="track.HardLAR">
+<span class="label label-primary">HAR</span>
+<input type="number" min="0" ng-model="track.HAR">
+<span class="label label-warning">Hard HAR</span>
+<input type="checkbox" ng-model="track.HardHAR">
+<span class="label label-danger">HAR first?</span>
+<input type="checkbox" ng-model="track.HARFirst">
+!-->
 
         <table class="table">
             <thead>
@@ -21,16 +45,16 @@
                     <th>Location</th>
                     <th>Damage</th>
                     <!--
-                    <th>Empty</th>
-                    <th>Shock</th>
-                    <th>Killing</th>
-                    !-->
+<th>Empty</th>
+<th>Shock</th>
+<th>Killing</th>
+!-->
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="t in track.Locations track by $index" ng-class="TableHighlight(t)">
                     <td>{{t.Name}}</td>
-                    <td>{{t.Upper}}</td>
+                    <td>{{prettyBounds($index)}}</td>
                     <td>
                         <progress>
                             <bar value="t.Track.Open*100.0/(t.Track.Open+t.Track.Shock+t.Track.Killing)" type="success"><span>{{t.Track.Open}}</span></bar>
@@ -39,10 +63,10 @@
                         </progress>
                     </td>
                     <!--
-                    <td>{{t.Track.Open}}</td>
-                    <td>{{t.Track.Shock}}</td>
-                    <td>{{t.Track.Killing}}</td>
-                    !-->
+<td>{{t.Track.Open}}</td>
+<td>{{t.Track.Shock}}</td>
+<td>{{t.Track.Killing}}</td>
+!-->
                 </tr>
             </tbody>  
         </table>

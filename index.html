@@ -19,25 +19,48 @@
         <div class="jumbotron">
             <h2>Wild Talent Combat Manager</h4>
         </div>
-        <div class="container-fluid">
-            <div class="panel panel-primary" ng-repeat="x in Characters">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-brand">
+                    <p>WTManager</p>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li ng-repeat="x in Characters | orderBy:'Order'">
+                            <a ng-attr-href="{{'#character-'+$index}}">{{x.Name}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="content">
+            <div class="panel panel-primary" ng-attr-id="{{'character-'+$index}}" ng-repeat="x in Characters | orderBy:'Order'">
                 <div class="panel-heading">
-                    <h3 class="panel-title">{{x.Name}}</h3>
+                    <h3 class="panel-title">{{x.Name}} - Init: {{x.Order}}</h3>
                 </div>
                 <div class="panel-body">
                     <textarea class="form-control">{{x.Statblock}}</textarea>
 
                     <br>
-                    <dice-tray dice="x.Dice"></dice-tray>
-
-                    <damage-track track="x.Track"></damage-track>
-
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <dice-tray dice="x.Dice"></dice-tray>
+                                </td>
+                                <td>
+                                    <damage-track track="x.Track"></damage-track>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <json-buddy dude="x"></json-buddy>
 
                 </div>
             </div>
+            <new-character characters="Characters"></new-character>
             <group-json group="Characters"></group-json>
-            
+
         </div>
 
 
@@ -53,5 +76,6 @@
         <script src="directives/damagetrack.js"></script>
         <script src="directives/jsonbuddy.js"></script>
         <script src="directives/groupjson.js"></script>
+        <script src="directives/newcharacter.js"></script>
     </body>
 </html>

@@ -670,9 +670,9 @@ function CreateDisplayTestGroup() {
 
     var dudes = [];
 
-    dude1 = new WTCharacter("Steve", 1, "Steve's statblock", [new Dicepool("Brawling", "7D1W"), new Dicepool("Shooting", "6D2HD")], HumanTrack(0));
+    dude1 = new WTCharacter("Steve", 3, "Steve's statblock", [new Dicepool("Brawling", "7D1W"), new Dicepool("Shooting", "6D2HD")], HumanTrack(0));
     dude2 = new WTCharacter("Bob", 2, "Bob's statblock", [new Dicepool("Brawling", "3D1W"), new Dicepool("Shooting", "4D2HD1W")], HumanTrack(0));
-    dude3 = new WTCharacter("Jane", 3, "Jane's statblock", [new Dicepool("Stability", "15D"), new Dicepool("Mind", "7D1W"), new Dicepool("Shooting", "6D2HD")], HumanTrack(0));
+    dude3 = new WTCharacter("Jane", 1, "Jane's statblock", [new Dicepool("Stability", "15D"), new Dicepool("Mind", "7D1W"), new Dicepool("Shooting", "6D2HD")], HumanTrack(0));
 
     dudes = [dude1, dude2, dude3];
 

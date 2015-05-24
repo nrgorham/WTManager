@@ -19,6 +19,25 @@ app.directive('damageTrack', function() {
                 } else 
                     return ''
             }
+            
+            scope.prettyBounds = function(i) {
+
+                if (i == 0) {
+                    if (scope.track.Locations[i].Upper != 1) {
+                        return "1 - " + scope.track.Locations[i].Upper
+                    } else {
+                        return "1"   
+                    }
+                } else {
+                    var diff = scope.track.Locations[i].Upper - scope.track.Locations[i-1].Upper;
+                    if (diff > 1) {
+                        return scope.track.Locations[i-1].Upper+1 + " - " + scope.track.Locations[i].Upper;
+                    } else {
+                        return scope.track.Locations[i].Upper+"";   
+                    }
+                }
+            }
+            
         }
 
     }

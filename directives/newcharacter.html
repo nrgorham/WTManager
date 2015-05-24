@@ -1,0 +1,148 @@
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">New Character</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="">
+                        <div class="input-group">
+                            <span class="input-group-addon">Name</span>
+                            <input class="form-control" type="text" ng-model="cName">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon" ng-init="cStatblock=''">Statblock</span>
+                            <textarea class="form-control" ng-model="cStatblock"></textarea>
+                        </div>
+                        <div class="well-sm"> 
+                            <p>Initiative order</p>
+                            <div class="input-group" ng-init="cInitSense=1;cInitPerception=1;cInitMind=1">
+                                <span class="input-group-addon">Sense</span>
+                                <input class="form-control" type="number" min="1" ng-model="cInitSense">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">Perception</span>
+                                <input class="form-control" type="number" min="1" ng-model="cInitPerception">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">Mind</span>
+                                <input class="form-control" type="number" min="1" ng-model="cInitMind">
+                            </div>
+                        </div>
+                        <div class="well-sm" ng-form="poolForm">
+                            <p>Dice pools</p>
+                            <div ng-repeat="p in cPools track by $index">
+                                <div class="well-sm">
+                                    <div ng-show="$index == 0 || cPools[$index-1].name != ''">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Pool Name</span>
+                                            <input class="form-control" type="text" ng-model="p.name">
+                                        </div>
+                                        <div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Normal Dice</span>
+                                                <input class="form-control" type="number" min="0" ng-model="p.pool.Normal">
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Hard Dice</span>
+                                                <input class="form-control" type="number" min="0" ng-model="p.pool.Hard">
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Wiggle Dice</span>
+                                                <input class="form-control" type="number" min="0" ng-model="p.pool.Wiggle">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="well-sm" ng-form="templateForm">
+                            <p>Select a damage template</p>
+
+                            <div class="well-sm">
+                                <div class="input-group" ng-init="cExtraTough=0">
+                                    <span class="input-group-addon">Levels of Extra Tough</span>
+                                    <input class="form-control" type="number" min="0" ng-model="cExtraTough">
+                                </div>
+                            </div>
+                            <div class="well-sm">
+                                <div class="well-sm" ng-repeat="template in cTemplates">
+                                    <button class="btn" ng-click="template.Build()">{{template.Name}}</button>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+                    </td>
+                    <td class="form-inline">
+                        <div class="input-group">
+                            <span class="input-group-addon" ng-init="LAR=0">LAR</span>
+                            <input class="form-control" type="number" min="0" ng-model="LAR">
+                            <span class="input-group-addon" ng-init="hardLAR=false">Hardened?
+                                <input type="checkbox" ng-model="hardLAR" aria-label="Hardened?">
+                            </span>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon" ng-init="HAR=0">HAR</span>
+                            <input class="form-control" type="number" min="0" ng-model="HAR">
+                            <span class="input-group-addon" ng-init="hardHAR=false">Hardened?
+                                <input type="checkbox" ng-model="hardHAR" aria-label="Hardened?">
+                            </span>
+                        </div>
+                        <div class="input-group" ng-init="HARFirst = true">
+                            <p>Apply HAR first?
+                                <input type="checkbox" ng-model="HARFirst">
+                            </p>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Location</th>
+                                    <th>Overflow</th>
+                                    <th>Size</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="l in newLocs track by $index">
+                                    <td>
+                                        <input type="text" ng-model="l.Name">
+                                    </td>
+                                    <td>
+                                        <span>{{prettyBounds($index)}}</span>
+                                    </td>
+                                    <td>
+                                        <span ng-bind="l.CarryOver"/>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="1" ng-model="l.Track.Open">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- <button class="btn btn-sm btn-success">I touched some of the numbers.</button> -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!--
+        <div class="well-sm">
+            <button class="btn btn-success" ng-click="cBuild()">Test</button>
+        </div>
+        !-->
+
+        <div ng-show="newLocs.length>0">
+            <div class="well-sm">
+                <button class="btn btn-success" ng-click="cAdd()">Add this character</button>
+            </div>
+            <div class="well-sm">
+                <button class="btn btn-success" ng-click="cJSON()">Get a JSON of this character</button>
+                <textarea class="form-control" ng-model="cJSONOut"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
