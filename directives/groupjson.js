@@ -16,6 +16,15 @@ app.directive('groupJson', function() {
                 var t = JSON.parse(scope.GroupJSON);
                 scope.group = RestoreCharacters(t);
             }
+            scope.AddToGroup = function() {
+                var t = JSON.parse(scope.GroupJSON);
+                t = RestoreCharacters(t);
+                
+                for (var i = 0; i < t.length; i++) {
+                    scope.group.push(t[i]);   
+                }
+                
+            }
             
         }
     }

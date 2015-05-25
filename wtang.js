@@ -3,7 +3,7 @@ var app = angular.module('WTManager', ['ui.bootstrap'])
     
     var self=this;
     
-    //$scope.Characters = [];
+    $scope.Characters = [];
         
     $scope.Characters = CreateDisplayTestGroup();
     
@@ -22,5 +22,16 @@ var app = angular.module('WTManager', ['ui.bootstrap'])
         return Math.min(val + 1, ceiling);
     }
         
+    $scope.deleteCharacter = function(char) {
+     
+        //console.log(char);
+        
+        var i = $scope.Characters.indexOf(char);
+        
+        $scope.Characters.splice(i,1);
+        
+        
+    }
+    
 }]);
                           

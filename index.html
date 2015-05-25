@@ -22,7 +22,7 @@
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-brand">
-                    <p>WTManager</p>
+                    <a href="#">WTManager</a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
@@ -42,29 +42,31 @@
                     <h3 class="panel-title">{{x.Name}} - Init: {{x.Order}}</h3>
                 </div>
                 <div class="panel-body">
-                    <textarea class="form-control">{{x.Statblock}}</textarea>
+                    <div class="well-sm" ng-init="x.editMode=false">
+                        <button class="btn btn-danger btn-sm" ng-click="x.editMode = !x.editMode">Edit/Delete Character</button>
+                        <div class = "well-sm" ng-show="x.editMode">
+                            <div class="input-group">
+                                <span class="input-group-addon">Name</span>
+                                <input type="text" class="form-control" ng-model="x.Name">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">Init order "(Sense - 1)(Perception - 1)(Mind - 1)"</span>
+                                <input type="text" class="form-control" ng-model="x.Order">
+                            </div>
+                            <br>
+                            <div class="well-sm">
+                                <button class="btn btn-sm btn-danger" ng-click="deleteCharacter(x)">DELETE</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <textarea class="form-control" ng-model="x.Statblock"></textarea>
 
                     <br>
 
                     <div class="well-sm">
                         <table class="table">
                             <tbody>
-                                <!--
-                                <tr>
-                                    <td>
-                                        <div class="input-group">
-                                            <span class="input-group-addon">Willpower</span>
-                                            <input class="form-control" type="number" min="0" ng-model="x.Willpower">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-group" ng-init="cBaseWill=0">
-                                            <span class="input-group-addon">Base Will</span>
-                                            <input class="form-control" type="number" min="0" ng-model="x.BaseWill">
-                                        </div> 
-                                    </td>
-                                </tr>
-                                !-->
                                 <tr>
                                     <td>
                                         <button class="btn btn-success" ng-click="x.Willpower = x.Willpower+1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
@@ -80,18 +82,8 @@
                             </tbody>
 
                         </table>
-                        <!--
-                        <p>Willpower</p>
-                        <div class="input-group">
-                            <span class="input-group-addon">Willpower</span>
-                            <input class="form-control" type="number" min="0" ng-model="x.Willpower">
-                        </div>
-                        <div class="input-group" ng-init="cBaseWill=0">
-                            <span class="input-group-addon">Base Will</span>
-                            <input class="form-control" type="number" min="0" ng-model="x.BaseWill">
-                        </div>  
-                        !-->
                     </div>
+
 
                     <table>
                         <tbody>
@@ -109,9 +101,9 @@
 
                 </div>
             </div>
-            
+
             <new-character characters="Characters"></new-character>
-            
+
             <group-json group="Characters"></group-json>
 
         </div>
