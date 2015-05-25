@@ -676,6 +676,13 @@ function CreateDisplayTestGroup() {
 
     dudes = [dude1, dude2, dude3];
 
+    for (var i=0; i < dudes.length; i++) {
+        
+        dudes[i].Willpower = Math.floor(Math.random()*20)+1;
+        dudes[i].BaseWill = Math.floor(Math.random()*10)+1;
+        
+    }
+    
     return dudes;
 }
 

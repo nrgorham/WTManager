@@ -45,21 +45,24 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3">
-                                <button class="btn btn-success" ng-click="incrementBonus(x)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                                <span>Bonus Dice ({{x.BonusDice}})</span>
-                                <button class="btn btn-danger" ng-click="decrementBonus(x)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                            <td>
+                                <p>
+                                    <button class="btn btn-success" ng-click="incrementBonus(x)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                    <span>Bonus Dice ({{x.BonusDice}})</span>
+                                    <button class="btn btn-danger" ng-click="decrementBonus(x)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                                </p>
                             </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">
+                            <td></td>
+                            <td>
                                 <button class="btn btn-success" ng-click="incrementPenalty(x)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                 <span>Penalty Dice ({{x.PenaltyDice}})</span>
                                 <button class="btn btn-danger" ng-click="decrementPenalty(x)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3">
+                            <td>
+                            </td>
+                            <td>
                                 <div class="input-group center-block">
                                     <button class="btn btn-success" ng-disabled="dieform.$invalid" ng-click="Roll(x)">Roll</button>
                                     <button class="btn btn-danger" ng-show="x.CurrentRoll" ng-click="Clear(x)">Clear</button>

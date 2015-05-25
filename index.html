@@ -29,11 +29,14 @@
                         <li ng-repeat="x in Characters | orderBy:'Order'">
                             <a ng-attr-href="{{'#character-'+$index}}">{{x.Name}}</a>
                         </li>
+                        <li>
+                            <a href="#addnewcharacter"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
-        <div class="content">
+        <div class="container-fluid">
             <div class="panel panel-primary" ng-attr-id="{{'character-'+$index}}" ng-repeat="x in Characters | orderBy:'Order'">
                 <div class="panel-heading">
                     <h3 class="panel-title">{{x.Name}} - Init: {{x.Order}}</h3>
@@ -42,6 +45,54 @@
                     <textarea class="form-control">{{x.Statblock}}</textarea>
 
                     <br>
+
+                    <div class="well-sm">
+                        <table class="table">
+                            <tbody>
+                                <!--
+                                <tr>
+                                    <td>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Willpower</span>
+                                            <input class="form-control" type="number" min="0" ng-model="x.Willpower">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group" ng-init="cBaseWill=0">
+                                            <span class="input-group-addon">Base Will</span>
+                                            <input class="form-control" type="number" min="0" ng-model="x.BaseWill">
+                                        </div> 
+                                    </td>
+                                </tr>
+                                !-->
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-success" ng-click="x.Willpower = x.Willpower+1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                        <span>Willpower ({{x.Willpower}})</span>
+                                        <button class="btn btn-danger" ng-click="x.Willpower = decrementFloor(x.Willpower, 0)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success" ng-click="x.BaseWill = incrementCeiling(x.BaseWill, 1000)"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span></button>
+                                        <span>Base Will ({{x.BaseWill}})</span>
+                                        <button class="btn btn-danger" ng-click="x.BaseWill = decrementFloor(x.BaseWill,0)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <!--
+                        <p>Willpower</p>
+                        <div class="input-group">
+                            <span class="input-group-addon">Willpower</span>
+                            <input class="form-control" type="number" min="0" ng-model="x.Willpower">
+                        </div>
+                        <div class="input-group" ng-init="cBaseWill=0">
+                            <span class="input-group-addon">Base Will</span>
+                            <input class="form-control" type="number" min="0" ng-model="x.BaseWill">
+                        </div>  
+                        !-->
+                    </div>
+
                     <table>
                         <tbody>
                             <tr>
@@ -58,7 +109,9 @@
 
                 </div>
             </div>
+            
             <new-character characters="Characters"></new-character>
+            
             <group-json group="Characters"></group-json>
 
         </div>

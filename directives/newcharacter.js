@@ -130,6 +130,9 @@ app.directive('newCharacter', function() {
                     newTrack
                 )
 
+                scope.newGuy.Willpower = scope.cWillpower;
+                scope.newGuy.BaseWill = scope.cBaseWill;
+                
                 console.log(scope.newGuy);
 
             }
@@ -145,6 +148,7 @@ app.directive('newCharacter', function() {
                 var u = RestoreCharacters([t]);
                 console.log(u);
                 scope.characters.push(u[0]);
+                scope.cInit();
 
             }
 
@@ -154,6 +158,16 @@ app.directive('newCharacter', function() {
             }
 
             scope.cInit = function () {
+                
+                scope.cName = "";
+                scope.cStatblock = "";
+                scope.cInitSense = 1;
+                scope.cInitPerception = 1;
+                scope.cInitMind = 1;
+                
+                scope.cWillpower=0;
+                scope.cBaseWill=0;
+                
                 scope.cPools = [];
                 for (var i=0; i < 10; i++) 
                 {
@@ -169,7 +183,15 @@ app.directive('newCharacter', function() {
                         }
                     );
                 }
-
+                
+                scope.cExtraTough = 0;
+                scope.LAR = 0;
+                scope.HAR = 0;
+                scope.hardHAR = false;
+                scope.hardLAR = false;
+                scope.HARFirst = true;
+                
+                
                 scope.newLocs = [];
             }
 
