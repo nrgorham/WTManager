@@ -88,6 +88,12 @@ app.directive('diceTray', function() {
                     scope.UpdateMax(x);
                 }
             }
+            
+            scope.Remove = function(x, index) {
+                x.CurrentRoll.rolls[index] = 0;
+                scope.UpdateMax(x);
+            }
+            
             scope.Wiggle = function(x,index) {
                 if (x.CurrentRoll.wiggle > 0) {
                     x.CurrentRoll.rolls[index]++;

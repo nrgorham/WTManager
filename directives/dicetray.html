@@ -84,7 +84,10 @@
                                         <tr ng-repeat="r in x.CurrentRoll.rolls track by $index" ng-class="TableHighlight(x,$index)" ng-hide="(r==0||r==1)&&x.CurrentRoll.wiggle==0">
                                             <td><strong>{{$index+1}}</strong></td>
                                             <td>{{r}}</td>
-                                            <td><button class="btn btn-danger" ng-click="Gobble(x,$index)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></td>
+                                            <td>
+                                                <button class="btn btn-danger" ng-click="Gobble(x,$index)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                                                <button class="btn btn-danger" ng-click="Remove(x, $index)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                                            </td>
                                             <td ng-hide="x.CurrentRoll.wiggle==0"><button class="btn btn-success" ng-click="Wiggle(x,$index)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></td>
                                         </tr>
 

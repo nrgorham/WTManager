@@ -27,7 +27,7 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li ng-repeat="x in Characters | orderBy:'Order' | orderBy: ['Order','Name']">
-                            <a ng-attr-href="{{'#character-'+$index}}">{{x.Name}} <span class="small">{{x.RollDisplayString}}</span></a>
+                            <a ng-attr-href="{{'#character-'+$index}}">{{x.Name}} <small>{{x.RollDisplayString}}</small></a>
                         </li>
                         <li>
                             <a href="#addnewcharacter"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
