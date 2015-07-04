@@ -3,7 +3,8 @@ app.directive('diceTray', function() {
         restrict: "AE",
         replace:false,
         scope: {
-            dice:"="
+            dice:"=",
+            character:"="
         },
         templateUrl:"directives/dicetray.html",
         link: function(scope, elem, attrs) {
@@ -37,19 +38,49 @@ app.directive('diceTray', function() {
                 scope.UpdateMax(x);
             }
             scope.Clear = function(x) {
-                x.CurrentRoll = null;   
+                x.CurrentRoll = null;
+                scope.CurrentWidthStringGenerator();
             }
 
             scope.UpdateMax = function(x) {
                 var max = 0;
+                var str = "";
                 for (var i=0; i<x.CurrentRoll.rolls.length;i++) {
+                    if (x.CurrentRoll.rolls[i] > 1) {
+                        if (/.*\d$/.test(str)) {
+                            str += " " + (i+1)+"x"+x.CurrentRoll.rolls[i];
+                        } else {
+                            str += (i+1)+"x"+x.CurrentRoll.rolls[i];
+                        }
+                    }
+                    
                     if (x.CurrentRoll.rolls[i] >= x.CurrentRoll.rolls[max]) {
                         max = i;
                     }
                 }
                 x.CurrentRoll.Max = max;   
+                x.CurrentRoll.DisplayString = str;
+                scope.CurrentWidthStringGenerator();
             }
-
+            
+            scope.CurrentWidthStringGenerator = function() {
+                var str = "";
+                
+                for (var i = 0; i < scope.dice.length; i++) {
+                    if (scope.dice[i].CurrentRoll != undefined) {
+                        if (scope.dice[i].CurrentRoll.DisplayString != undefined) {
+                            if (str != "") {
+                                str += "; " + scope.dice[i].CurrentRoll.DisplayString;
+                            } else {
+                                str += scope.dice[i].CurrentRoll.DisplayString;   
+                            }
+                        }
+                    }
+                }
+                
+                scope.character.RollDisplayString = str;
+            }
+            
             //scope.CurrentRoll = null;
             scope.Gobble = function(x,index) {
                 if (x.CurrentRoll.rolls[index]>0) {
