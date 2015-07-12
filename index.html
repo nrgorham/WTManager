@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="WTManager">
+
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,7 +28,7 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li ng-repeat="x in Characters | orderBy:'Order' | orderBy: ['Order','Name']">
-                            <a ng-attr-href="{{'#character-'+$index}}">{{x.Name}} <small>{{x.RollDisplayString}}</small></a>
+                            <a ng-attr-href="{{'#character-'+$index}}"><strong>{{x.Name}}</strong> <small>{{x.RollDisplayString}}</small></a>
                         </li>
                         <li>
                             <a href="#addnewcharacter"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
@@ -37,71 +38,72 @@
             </div>
         </nav>
         <div class="container-fluid">
-            <div class="panel panel-primary" ng-attr-id="{{'character-'+$index}}" ng-repeat="x in Characters | orderBy: ['Order','Name']">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{x.Name}} - Init: {{x.Order}}</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="well-sm" ng-init="x.editMode=false">
-                        <button class="btn btn-danger btn-sm" ng-click="x.editMode = !x.editMode">Edit/Delete Character</button>
-                        <div class = "well-sm" ng-show="x.editMode">
-                            <div class="input-group">
-                                <span class="input-group-addon">Name</span>
-                                <input type="text" class="form-control" ng-model="x.Name">
-                            </div>
-                            <div class="input-group">
-                                <span class="input-group-addon">Init order "(Sense - 1)(Perception - 1)(Mind - 1)"</span>
-                                <input type="text" class="form-control" ng-model="x.Order">
-                            </div>
-                            <br>
-                            <div class="well-sm">
-                                <button class="btn btn-sm btn-danger" ng-click="deleteCharacter(x)">DELETE</button>
+            <div class="navpanelpadding" ng-attr-id="{{'character-'+$index}}" ng-repeat="x in Characters | orderBy: ['Order','Name']">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{x.Name}} - Init: {{x.Order}}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="well-sm" ng-init="x.editMode=false">
+                            <button class="btn btn-danger btn-sm" ng-click="x.editMode = !x.editMode">Edit/Delete Character</button>
+                            <div class = "well-sm" ng-show="x.editMode">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Name</span>
+                                    <input type="text" class="form-control" ng-model="x.Name">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Init order "(Sense - 1)(Perception - 1)(Mind - 1)"</span>
+                                    <input type="text" class="form-control" ng-model="x.Order">
+                                </div>
+                                <br>
+                                <div class="well-sm">
+                                    <button class="btn btn-sm btn-danger" ng-click="deleteCharacter(x)">DELETE</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <textarea class="form-control" ng-model="x.Statblock"></textarea>
+                        <textarea class="form-control" ng-model="x.Statblock"></textarea>
 
-                    <br>
+                        <br>
 
-                    <div class="well-sm">
-                        <table class="table">
+                        <div class="well-sm">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-success" ng-click="x.Willpower = x.Willpower+1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                            <span>Willpower ({{x.Willpower}})</span>
+                                            <button class="btn btn-danger" ng-click="x.Willpower = decrementFloor(x.Willpower, 0)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-success" ng-click="x.BaseWill = incrementCeiling(x.BaseWill, 1000)"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span></button>
+                                            <span>Base Will ({{x.BaseWill}})</span>
+                                            <button class="btn btn-danger" ng-click="x.BaseWill = decrementFloor(x.BaseWill,0)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+
+
+                        <table>
                             <tbody>
                                 <tr>
                                     <td>
-                                        <button class="btn btn-success" ng-click="x.Willpower = x.Willpower+1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                                        <span>Willpower ({{x.Willpower}})</span>
-                                        <button class="btn btn-danger" ng-click="x.Willpower = decrementFloor(x.Willpower, 0)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                                        <dice-tray dice="x.Dice" character="x"></dice-tray>
                                     </td>
                                     <td>
-                                        <button class="btn btn-success" ng-click="x.BaseWill = incrementCeiling(x.BaseWill, 1000)"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span></button>
-                                        <span>Base Will ({{x.BaseWill}})</span>
-                                        <button class="btn btn-danger" ng-click="x.BaseWill = decrementFloor(x.BaseWill,0)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                                        <damage-track track="x.Track"></damage-track>
                                     </td>
                                 </tr>
                             </tbody>
-
                         </table>
+                        <json-buddy dude="x"></json-buddy>
+
                     </div>
-
-
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <dice-tray dice="x.Dice" character="x"></dice-tray>
-                                </td>
-                                <td>
-                                    <damage-track track="x.Track"></damage-track>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <json-buddy dude="x"></json-buddy>
-
                 </div>
             </div>
-
             <new-character characters="Characters"></new-character>
 
             <group-json group="Characters"></group-json>
