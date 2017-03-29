@@ -3,7 +3,7 @@ A character/combat manager for One Roll Engine RPG games like Wild Talents
 
 It's not finished yet, but this is a working version of my Wild Talents encounter management app thingydo.
 
-http://poopiebutt.club/WTManager/
+//The link's dead at the moment
 
 So right now all the die rolling and damage tracking stuff should work correctly. You can specify your dice pools and the engine will correctly prune out whatever you end up with to take care of penalties or making sure you're only rolling at most 10 dice and all that fun stuff. If you have wiggle dice in your pool, after you've rolled you'll be able to add them to existing sets or allocate them to whatever the hell number you want. You can also gobble dice from sets. It'll also highlight your widest set in green.
 
